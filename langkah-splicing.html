@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BLACK JACK</title>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <style>
+      body {
+        font-family: sans-serif;
+        background: #111;
+        color: white;
+        text-align: center;
+        padding: 20px;
+      }
+      .cards {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 30px;
+      }
+      .card {
+        width: 100px;
+        height: 140px;
+        background: #444;
+        border-radius: 8px;
+        cursor: pointer;
+        perspective: 1000px;
+      }
+      .card-inner {
+        width: 100%;
+        height: 100%;
+        transition: transform 0.6s;
+        transform-style: preserve-3d;
+        position: relative;
+      }
+      .card.flipped .card-inner {
+        transform: rotateY(180deg);
+      }
+      .card-front,
+      .card-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 12px;
+        padding: 5px;
+      }
+      .card-front {
+        background: gold;
+        color: black;
+        transform: rotateY(180deg);
+      }
+      .card-back {
+        background: #333;
+      }
+      .card-front img {
+        width: 60px;
+        height: 60px;
+        margin-bottom: 5px;
+      }
+      .summary {
+        border: 2px solid gold;
+        padding: 20px;
+        margin-top: 30px;
+        border-radius: 10px;
+      }
+      .summary h3 {
+        margin-bottom: 10px;
+      }
+      .jackpot {
+        font-size: 2em;
+        color: #ff0;
+        animation: blink 1s infinite;
+        margin-top: 20px;
+      }
+      @keyframes blink {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0;
+        }
+      }
+      #kembaliBtn {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1000;
+        color: white;
+        border-radius: 50%;
+        padding: 8px;
+        text-decoration: none;
+        transition: 0.3s;
+      }
+
+      #kembaliBtn:hover {
+        color: #b4b4b4;
+      }
+    </style>
+  </head>
+  <body>
+    <a href="index.html" id="kembaliBtn" title="Kembali ke Beranda">
+      <i data-feather="log-out"></i>
+    </a>
+    <h1>LANGKAH SPLICING</h1>
+    <h1>BLACKJACK</h1>
+    <h3>Pilih kartu</h3>
+    <div id="jackpot" class="jackpot" style="display: none">
+      JACKPOT!! Urutan langkah-langkah Benar!
+    </div>
+    <div class="cards" id="cardContainer"></div>
+    <div class="summary" id="summary">
+      <h3>Langkah-Langkah Penyambungan:</h3>
+      <div id="summaryCards" class="cards"></div>
+    </div>
+    <!--NAVBAR-->
+    <div
+      style="
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: #333333;
+        z-index: 999;
+      "
+    >
+      <table width="100%" border="0" cellpadding="8">
+        <tr align="center">
+          <td>
+            <a href="alat-bahan-splicing.html">
+              <font color="white"><b>ALAT & BAHAN SPLICING</b></font>
+            </a>
+          </td>
+          <td>
+            <a href="alat-bahan-konfigurasi.html">
+              <font color="white"><b>ALAT & BAHAN KONFIGURASI</b></font>
+            </a>
+          </td>
+          <td>
+            <a href="langkah-konfigurasi.html">
+              <font color="white"><b>LANGKAH KONFIGURASI MIKROTIK</b></font>
+            </a>
+          </td>
+          <td>
+            <a href="hasil.html">
+              <font color="white"><b>HASIL</b></font>
+            </a>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <script>
+      const steps = [
+        {
+          title: "Persiapan alat",
+          img:
+            "https://tse2.mm.bing.net/th?id=OIP.BpQZygfJPGyWusM5_Yy2MgHaGR&pid=Api&P=0&h=180",
+        },
+        {
+          title: "Proses pengupasan",
+          img:
+            "https://media.istockphoto.com/id/1314097355/id/foto/sinyal-internet-kabel-fiber-optic-fusion-splicer-dan-koneksi-kawat-dengan-mesin-fiber-optic.jpg?s=612x612&w=0&k=20&c=odEyVyyzrj7-bNuagFplZusyKmWBcihhaUNl-dhAfbM=",
+        },
+        {
+          title: "Proses Pemotongan",
+          img:
+            "https://media.istockphoto.com/id/1314097399/id/foto/sinyal-internet-kabel-fiber-optic-fusion-splicer-dan-koneksi-kawat-dengan-mesin-fiber-optic.jpg?s=612x612&w=0&k=20&c=OT99mor3EVamQpavRK7eFSc5qki9H4NdXlsaLI30SdE=",
+        },
+        {
+          title: "Penyambungan dengan alat splicing",
+          img:
+            "https://media.istockphoto.com/id/1314097262/id/foto/sinyal-internet-kabel-fiber-optic-fusion-splicer-dan-koneksi-kawat-dengan-mesin-fiber-optic.jpg?s=612x612&w=0&k=20&c=ydu6jUkokH8IslRTeyJurKaENV6Q69YwQKmuzpjsWL0=",
+        },
+        {
+          title: "Pelindung Sambungan",
+          img:
+            "https://media.istockphoto.com/id/1314097364/id/foto/sinyal-internet-kabel-fiber-optic-fusion-splicer-dan-koneksi-kawat-dengan-mesin-fiber-optic.jpg?s=612x612&w=0&k=20&c=bQHidxKKSjRvyGaQmkgnE4gRxCrtX7eHMRb_95rhd14=",
+        },
+        {
+          title: "Pemeriksaan hasil splicing",
+          img: "https://m.media-amazon.com/images/I/51FVahgF-KL.jpg",
+        },
+      ];
+
+      const cardContainer = document.getElementById("cardContainer");
+      const summaryCards = document.getElementById("summaryCards");
+      const jackpot = document.getElementById("jackpot");
+
+      let availableIndices = [0, 1, 2, 3, 4, 5];
+      let cards = [];
+      let currentStep = 0;
+
+      // Shuffle card positions
+      function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+      }
+
+      function createCard(position) {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.dataset.position = position;
+
+        const inner = document.createElement("div");
+        inner.className = "card-inner";
+
+        const back = document.createElement("div");
+        back.className = "card-back";
+        back.innerText = "?";
+
+        const front = document.createElement("div");
+        front.className = "card-front";
+
+        inner.appendChild(front);
+        inner.appendChild(back);
+        card.appendChild(inner);
+
+        card.addEventListener("click", () => {
+          if (card.classList.contains("flipped") || currentStep >= steps.length)
+            return;
+
+          const step = steps[currentStep];
+
+          // isi kartu
+          const img = document.createElement("img");
+          img.src = step.img;
+          const text = document.createElement("div");
+          text.innerText = step.title;
+
+          front.appendChild(img);
+          front.appendChild(text);
+
+          card.classList.add("flipped");
+
+          setTimeout(() => {
+            const clone = card.cloneNode(true);
+            clone.classList.add("flipped");
+            summaryCards.appendChild(clone);
+            card.style.visibility = "hidden";
+
+            currentStep++;
+            if (currentStep === steps.length) {
+              jackpot.style.display = "block";
+            }
+          }, 600);
+        });
+
+        return card;
+      }
+
+      // Generate acak posisi
+      const shuffled = shuffle([...availableIndices]);
+      for (let i = 0; i < shuffled.length; i++) {
+        const card = createCard(shuffled[i]);
+        cards.push(card);
+        cardContainer.appendChild(card);
+      }
+      feather.replace();
+    </script>
+  </body>
+</html>

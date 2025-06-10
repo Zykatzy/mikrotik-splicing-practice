@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Plinko Realistis</title>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <style>
+      body {
+        background: #111;
+        color: #fff;
+        font-family: sans-serif;
+        text-align: center;
+        margin: 0;
+        padding: 0;
+      }
+
+      .wrapper {
+        display: flex;
+        justify-content: center;
+        margin-top: 30px;
+      }
+
+      .board {
+        position: relative;
+        width: 440px;
+        height: 500px;
+        background: #222;
+        border: 2px solid #555;
+      }
+
+      .peg {
+        width: 8px;
+        height: 8px;
+        background: white;
+        border-radius: 50%;
+        position: absolute;
+      }
+
+      .slot {
+        position: absolute;
+        bottom: 0;
+        width: 40px;
+        height: 40px;
+        background: rgb(79, 59, 255);
+        text-align: center;
+        line-height: 40px;
+        font-size: 12px;
+        color: solid #fff;
+        border-top: 2px #000;
+      }
+
+      .ball {
+        width: 16px;
+        height: 16px;
+        background: gold;
+        border-radius: 50%;
+        position: absolute;
+        transition: top 0.2s linear, left 0.2s ease;
+        z-index: 10;
+      }
+
+      button {
+        margin-top: 20px;
+        padding: 10px 20px;
+        background: rgb(79, 59, 255);
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+      }
+      #kembaliBtn {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1000;
+        color: white;
+        border-radius: 50%;
+        padding: 8px;
+        text-decoration: none;
+        transition: 0.3s;
+      }
+
+      #kembaliBtn:hover {
+        color: #b4b4b4;
+      }
+      body {
+        background: linear-gradient(to bottom, #111, #222);
+        font-family: "Courier New", monospace;
+        color: #00ff99;
+        text-align: center;
+        padding: 40px 20px;
+      }
+
+      h1 {
+        font-size: 2.5rem;
+        color: gold;
+        margin-bottom: 30px;
+        text-shadow: 0 0 10px #fbc02d;
+      }
+
+      .hasil-container {
+        background: linear-gradient(145deg, #2c2c2c, #1a1a1a);
+        border: 2px dashed gold;
+        padding: 25px;
+        margin: 0 auto;
+        max-width: 600px;
+        border-radius: 15px;
+        box-shadow: 0 0 15px #fbc02d, 0 0 30px rgba(255, 255, 0, 0.3);
+        animation: glow 2s infinite alternate;
+      }
+
+      .hasil-container ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .hasil-container li {
+        margin: 15px 0;
+        font-size: 1.1rem;
+        line-height: 1.6;
+        background: rgba(255, 255, 255, 0.05);
+        padding: 10px 15px;
+        border-radius: 10px;
+      }
+
+      @keyframes glow {
+        from {
+          box-shadow: 0 0 10px #fbc02d, 0 0 20px rgba(255, 255, 0, 0.3);
+        }
+        to {
+          box-shadow: 0 0 20px #fbc02d, 0 0 40px rgba(255, 255, 0, 0.5);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a href="index.html" id="kembaliBtn" title="Kembali ke Beranda">
+      <i data-feather="log-out"></i>
+    </a>
+    <h1>
+      PLINKO
+      <span
+        style="
+          background-color: gold;
+          color: black;
+          padding: 4px;
+          font-style: italic;
+        "
+        >XY
+      </span>
+    </h1>
+    <h3>Main Untuk Melihat Hasil Splicing</h3>
+
+    <div class="wrapper">
+      <div class="board" id="board">
+        <div class="ball" id="ball"></div>
+      </div>
+    </div>
+
+    <button onclick="dropBall()">Mainkan</button>
+    <p id="result"></p>
+    <h1>Hasil Praktik Konfigurasi MikroTik</h1>
+
+    <div class="hasil-container">
+      <ul>
+        <li>Router berhasil dikonfigurasi dengan hostname yang sesuai</li>
+        <li>DNS aktif dan dapat mengakses internet</li>
+        <li>Koneksi internet melalui ether1 berhasil</li>
+        <li>
+          ether2 berhasil memberikan alamat IP secara otomatis ke PC melalui
+          DHCP
+        </li>
+        <li>
+          wlan1 aktif dan HP berhasil mendapatkan alamat IP secara otomatis
+        </li>
+        <li>
+          Firewall bekerja sesuai aturan: akses tertentu berhasil diblokir
+        </li>
+      </ul>
+    </div>
+    <!--NAVBAR-->
+    <div
+      style="
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: #333333;
+        z-index: 999;
+      "
+    >
+      <table width="100%" border="0" cellpadding="8">
+        <tr align="center">
+          <td>
+            <a href="alat-bahan-splicing.html">
+              <font color="white"><b>ALAT & BAHAN SPLICING</b></font>
+            </a>
+          </td>
+          <td>
+            <a href="langkah-splicing.html">
+              <font color="white"><b>LANGKAH SPLICING</b></font>
+            </a>
+          </td>
+          <td>
+            <a href="alat-bahan-konfigurasi.html">
+              <font color="white"><b>ALAT & BAHAN KONFIGURASI</b></font>
+            </a>
+          </td>
+          <td>
+            <a href="langkah-konfigurasi.html">
+              <font color="white"><b>LANGKAH KONFIGURASI MIKROTIK</b></font>
+            </a>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <script>
+      const board = document.getElementById("board");
+      const ball = document.getElementById("ball");
+      const resultText = document.getElementById("result");
+      const slotLabels = [
+        ">0.05",
+        "0.04",
+        "0.03",
+        "0.02",
+        "0.01",
+        "0.00",
+        "0.01",
+        "0.02",
+        "0.03",
+        "0.04",
+        ">0.05",
+      ];
+
+      function createPegs() {
+        const spacing = 40;
+        for (let row = 0; row < 10; row++) {
+          for (let col = 0; col < 11; col++) {
+            const peg = document.createElement("div");
+            peg.className = "peg";
+            const offset = row % 2 === 0 ? 0 : spacing / 2;
+            peg.style.left = `${col * spacing + offset}px`;
+            peg.style.top = `${row * spacing + 20}px`;
+            board.appendChild(peg);
+          }
+        }
+
+        // Buat slot
+        for (let i = 0; i < slotLabels.length; i++) {
+          const slot = document.createElement("div");
+          slot.className = "slot";
+          slot.style.left = `${i * 40}px`;
+          slot.textContent = slotLabels[i];
+          board.appendChild(slot);
+        }
+      }
+
+      createPegs();
+
+      function dropBall() {
+        ball.style.transition = "none";
+        ball.style.top = "0px";
+        ball.style.left = "212px"; // tengah
+
+        resultText.textContent = "";
+
+        setTimeout(() => {
+          ball.style.transition = "top 0.2s linear, left 0.2s ease";
+
+          let steps = 10;
+          let currentStep = 0;
+          let left = 212;
+
+          function animate() {
+            if (currentStep < steps) {
+              const zigzag = Math.random() > 0.5 ? 20 : -20;
+              left += zigzag;
+              left = Math.max(0, Math.min(left, 424)); // batas
+              ball.style.left = `${left}px`;
+              ball.style.top = `${(currentStep + 1) * 40}px`;
+              currentStep++;
+              setTimeout(animate, 200);
+            } else {
+              ball.style.left = `${7 * 40 + 12}px`; // slot tengah
+              ball.style.top = "420px";
+              resultText.textContent = "Hasil: 0.02db (REMIDI BJIR)";
+            }
+          }
+
+          animate();
+        }, 100);
+      }
+      feather.replace();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <title>888 GOLD</title>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #1a1a1a;
+        text-align: center;
+        margin: 0;
+        padding-top: 60px;
+        color: white;
+      }
+
+      .slot-container {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+
+      .reel {
+        width: 120px;
+        height: 105px;
+        overflow: hidden;
+        border: 2px solid white;
+        background: #333;
+        position: relative;
+      }
+
+      .symbols {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+      }
+
+      .symbol {
+        height: 100px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-bottom: 1px solid #ccc;
+      }
+
+      .symbol img {
+        width: 100%;
+        height: 100px;
+        object-fit: cover;
+      }
+
+      .highlight img {
+        border: 3px solid rgb(79, 59, 255);
+        border-radius: 8px;
+      }
+
+      button {
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        background: rgb(79, 59, 255);
+        color: white;
+        border: none;
+        border-radius: 5px;
+      }
+
+      #kembaliBtn {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1000;
+        color: white;
+        border-radius: 50%;
+        padding: 8px;
+        text-decoration: none;
+        transition: 0.3s;
+      }
+
+      #kembaliBtn:hover {
+        color: #b4b4b4;
+      }
+
+      #jackpotText {
+        margin-top: 20px;
+        font-size: 32px;
+        font-weight: bold;
+        color: gold;
+        display: none;
+        animation: blink 1s step-start 0s infinite;
+      }
+
+      @keyframes blink {
+        50% {
+          opacity: 0;
+        }
+      }
+      body {
+        font-family: sans-serif;
+        background: #111;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 20px;
+        padding-bottom: 70px; /* Tambahan agar tidak tertutup navbar */
+      }
+      #slotGrid {
+        display: grid;
+        grid-template-columns: repeat(4, 100px);
+        grid-template-rows: repeat(3, 100px);
+        gap: 10px;
+        margin: 20px;
+      }
+      .slotBox {
+        background: #333;
+        border: 2px solid #555;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: bold;
+        text-align: center;
+        padding: 5px;
+      }
+      .highlight {
+        border: 2px solid gold;
+        background-color: #222;
+        color: gold;
+      }
+      button {
+        background: rgb(79, 59, 255);
+        margin-top: 20px;
+        padding: 10px 20px;
+        font-size: 16px;
+        color: white;
+        border: none;
+        cursor: pointer;
+      }
+      #winnerLog {
+        margin-top: 20px;
+        max-width: 320px;
+        text-align: center;
+      }
+      #jackpot {
+        font-size: 2em;
+        color: #ff0;
+        animation: blink 1s infinite;
+        margin-top: 20px;
+        display: none;
+        text-shadow: 0 0 10px #ff0;
+      }
+      @keyframes blink {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0;
+        }
+      }
+      /* Navbar styling */
+      .navbar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: #333;
+        z-index: 999;
+        padding: 10px 0;
+      }
+
+      .navbar a {
+        color: white;
+        font-weight: bold;
+        text-decoration: none;
+        margin: 0 15px;
+      }
+
+      .navbar td {
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <a href="index.html" id="kembaliBtn" title="Kembali ke Beranda">
+      <i data-feather="log-out"></i>
+    </a>
+    <h1>ALAT DAN BAHAN SPLICING</h1>
+    <h1>888 <span style="color: gold">GOLD</span></h1>
+    <h1>Spin Untuk Melihat Bahan Yang Digunakan</h1>
+
+    <div class="slot-container" id="slotContainer"></div>
+    <button onclick="spin()">SPIN</button>
+    <div id="jackpotText">JACKPOT!!!</div>
+
+    <h1>Sweet <span style="color: gold">Bonanza</span></h1>
+    <h1>Spin Untuk Melihat Alat Yang Digunakan</h1>
+    <div id="slotGrid"></div>
+    <button onclick="spinSlot()">Spin</button>
+    <h3>Alat Yang Digunakan :</h3>
+    <div id="winnerLog"></div>
+    <div id="jackpot">JACKPOT!!!</div>
+
+    <!-- NAVBAR -->
+    <div class="navbar">
+      <table width="100%">
+        <tr>
+          <td><a href="langkah-splicing.html">LANGKAH SPLICING</a></td>
+          <td>
+            <a href="alat-bahan-konfigurasi.html">ALAT & BAHAN KONFIGURASI</a>
+          </td>
+          <td><a href="langkah-konfigurasi.html">LANGKAH KONFIGURASI</a></td>
+          <td><a href="hasil.html">HASIL</a></td>
+        </tr>
+      </table>
+    </div>
+
+    <script>
+      const alatImages = [
+        {
+          name: "Tisu Basah",
+          src: "https://cf.shopee.co.id/file/64aa3326797006f829f97188f1a163c0",
+        },
+        {
+          name: "Kabel Fiber Optik",
+          src:
+            "https://lzd-img-global.slatic.net/g/p/2ed3eddee8c2db3e9dfc1ac48551dec5.jpg_720x720q80.jpg",
+        },
+        {
+          name: "Sleeve",
+          src:
+            "https://telhua.com/wp-content/uploads/2021/08/40mm-fiber-optic-heat-shrink-sleeves-3.jpg",
+        },
+        {
+          name: "Alcohol",
+          src:
+            "https://siplahtelkom.com/public/products/192098/4148108/268018.40dc44e0-649b-426e-bd75-12e0ac5dc4a0.images-(23.jpeg",
+        },
+        {
+          name: "Power Meter",
+          src:
+            "https://filebroker-cdn.lazada.co.id/kf/S8b96910b520940bc96b2c99ded5629daN.jpg",
+        },
+        {
+          name: "SC Connector",
+          src:
+            "https://media.cablematic.com/__sized__/images_1000/fm00100-06-thumbnail-1080x1080-70.jpg",
+        },
+      ];
+
+      const hasilTetap = [
+        alatImages[0],
+        alatImages[1],
+        alatImages[2],
+        alatImages[3],
+      ];
+
+      const tinggiSimbol = 100;
+      const slotContainer = document.getElementById("slotContainer");
+      const reels = [];
+      const jackpotText = document.getElementById("jackpotText");
+
+      for (let i = 0; i < hasilTetap.length; i++) {
+        const reel = document.createElement("div");
+        reel.className = "reel";
+        const symbols = document.createElement("div");
+        symbols.className = "symbols";
+        reel.appendChild(symbols);
+        slotContainer.appendChild(reel);
+        reels.push({ reel, symbols });
+      }
+
+      function spin() {
+        jackpotText.style.display = "none";
+
+        reels.forEach((r, i) => {
+          const symbols = r.symbols;
+          const hasil = hasilTetap[i];
+          const stopIndex = 10;
+          symbols.innerHTML = "";
+
+          for (let j = 0; j < stopIndex; j++) {
+            const item =
+              alatImages[Math.floor(Math.random() * alatImages.length)];
+            const div = document.createElement("div");
+            div.className = "symbol";
+            div.innerHTML = `<img src="${item.src}" alt="${item.name}" />`;
+            symbols.appendChild(div);
+          }
+
+          const result = document.createElement("div");
+          result.className = "symbol";
+          result.innerHTML = `<img src="${hasil.src}" alt="${hasil.name}" />`;
+          symbols.appendChild(result);
+
+          symbols.style.transition = "none";
+          symbols.style.top = "0px";
+
+          setTimeout(() => {
+            symbols.style.transition = "top 2.5s ease-out";
+            symbols.style.top = `-${tinggiSimbol * stopIndex + 8}px`;
+
+            setTimeout(() => {
+              const all = symbols.querySelectorAll(".symbol");
+              all.forEach((el) => el.classList.remove("highlight"));
+              all[stopIndex].classList.add("highlight");
+
+              if (i === reels.length - 1) {
+                setTimeout(showJackpot, 500);
+              }
+            }, 2600);
+          }, i * 600);
+        });
+      }
+
+      function showJackpot() {
+        jackpotText.style.display = "block";
+        confetti({
+          particleCount: 150,
+          spread: 70,
+          origin: { y: 0.6 },
+        });
+      }
+      const tools = [
+        "Fusion Splicer",
+        "Fiber Cleaver",
+        "Fiber Stripper",
+        "VFL",
+        "OPM",
+      ];
+
+      const fillerTools = ["Connector", "Pigtail", "Patch Cord", "Adapter"];
+
+      const gridCols = 4;
+      const gridRows = 3;
+      let grid = [];
+
+      function createFixedGrid() {
+        const slotGrid = document.getElementById("slotGrid");
+        const winnerLog = document.getElementById("winnerLog");
+        winnerLog.innerHTML = "";
+        document.getElementById("jackpot").style.display = "none";
+        slotGrid.innerHTML = "";
+        grid = [];
+
+        let combinedTools = [...tools];
+        while (combinedTools.length < gridCols * gridRows) {
+          const randomFiller =
+            fillerTools[Math.floor(Math.random() * fillerTools.length)];
+          combinedTools.push(randomFiller);
+        }
+
+        for (let i = combinedTools.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [combinedTools[i], combinedTools[j]] = [
+            combinedTools[j],
+            combinedTools[i],
+          ];
+        }
+
+        combinedTools.forEach((tool) => {
+          const div = document.createElement("div");
+          div.className = "slotBox";
+          div.textContent = tool;
+          slotGrid.appendChild(div);
+          grid.push({ element: div, tool });
+        });
+      }
+
+      function cascadeWinSequence(index = 0) {
+        if (index >= tools.length) {
+          document.getElementById("jackpot").style.display = "block";
+          return;
+        }
+
+        const matchIndex = grid.findIndex((cell) => cell.tool === tools[index]);
+        if (matchIndex !== -1) {
+          const cell = grid[matchIndex];
+          const log = document.getElementById("winnerLog");
+          cell.element.classList.add("highlight");
+          log.innerHTML += `
+            <div>
+              - <b>${cell.tool}</b>
+            </div>
+          `;
+
+          setTimeout(() => {
+            const newTool =
+              fillerTools[Math.floor(Math.random() * fillerTools.length)];
+            cell.tool = newTool;
+            cell.element.textContent = newTool;
+            cell.element.classList.remove("highlight");
+            cascadeWinSequence(index + 1);
+          }, 1000);
+        } else {
+          cascadeWinSequence(index + 1);
+        }
+      }
+
+      function spinSlot() {
+        createFixedGrid();
+        setTimeout(() => {
+          cascadeWinSequence();
+        }, 500);
+      }
+
+      createFixedGrid();
+    </script>
+    <script>
+      feather.replace();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Roda Live Casino MikroTik - Riwayat Lengkap</title>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <style>
+      body {
+        background: #121212;
+        color: #fff;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        text-align: center;
+        padding: 30px;
+      }
+
+      #wheel-container {
+        position: relative;
+        margin: 0 auto;
+        width: 320px;
+        height: 320px;
+        perspective: 1000px;
+      }
+
+      #wheel {
+        width: 320px;
+        height: 320px;
+        border-radius: 50%;
+        background: conic-gradient(
+          #e53935 0deg 72deg,
+          #d81b60 72deg 144deg,
+          #8e24aa 144deg 216deg,
+          #3949ab 216deg 288deg,
+          #1e88e5 288deg 360deg
+        );
+        box-shadow: inset 0 0 30px rgba(255, 255, 255, 0.2),
+          0 8px 15px rgba(0, 0, 0, 0.8);
+        border: 6px solid #222;
+        position: relative;
+        transform-origin: center center;
+      }
+
+      #wheel::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        pointer-events: none;
+        background: repeating-conic-gradient(
+          transparent 0deg 14deg,
+          rgba(0, 0, 0, 0.3) 14deg 15deg
+        );
+      }
+
+      #pointer {
+        position: absolute;
+        top: -17px;
+        left: 53%;
+        transform: translateX(-50%) rotate(230deg);
+        width: 0;
+        height: 0;
+        border-left: 20px solid transparent;
+        border-right: 20px solid transparent;
+        border-top: 30px solid white;
+        filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.7));
+        z-index: 10;
+      }
+
+      #spinBtn {
+        margin-top: 25px;
+        padding: 12px 40px;
+        font-size: 18px;
+        background: #f44336;
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+        color: white;
+        transition: background 0.3s ease;
+      }
+      #spinBtn:disabled {
+        background: #a64b4b;
+        cursor: not-allowed;
+      }
+
+      #result {
+        margin-top: 20px;
+        font-size: 20px;
+        min-height: 26px;
+        font-weight: 600;
+      }
+
+      #history {
+        margin-top: 20px;
+        text-align: left;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+        background: #222;
+        padding: 15px;
+        border-radius: 10px;
+        overflow-y: auto;
+        max-height: 350px;
+        white-space: pre-wrap;
+        font-size: 14px;
+      }
+      #kembaliBtn {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1000;
+        color: white;
+        border-radius: 50%;
+        padding: 8px;
+        text-decoration: none;
+        transition: 0.3s;
+      }
+
+      #kembaliBtn:hover {
+        color: #b4b4b4;
+      }
+    </style>
+  </head>
+  <body>
+    <a href="index.html" id="kembaliBtn" title="Kembali ke Beranda">
+      <i data-feather="log-out"></i>
+    </a>
+    <h1>Sweet <span style="color: gold">Bonanza</span></h1>
+    <h1>Candyland</h1>
+    <h5>Spin Untuk Melihat Langkah Konfigurasi</h5>
+
+    <div id="wheel-container">
+      <div id="wheel"></div>
+      <div id="pointer"></div>
+    </div>
+
+    <button id="spinBtn">Spin</button>
+    <div id="result"></div>
+
+    <div id="history" aria-label="Riwayat hasil putaran"></div>
+    <!--NAVBAR-->
+    <div
+      style="
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: #333333;
+        z-index: 999;
+      "
+    >
+      <table width="100%" border="0" cellpadding="8">
+        <tr align="center">
+          <td>
+            <a href="alat-bahan-splicing.html">
+              <font color="white"><b>ALAT & BAHAN SPLICING</b></font>
+            </a>
+          </td>
+          <td>
+            <a href="langkah-splicing.html">
+              <font color="white"><b>LANGKAH SPLICING</b></font>
+            </a>
+          </td>
+          <td>
+            <a href="alat-bahan-konfigurasi.html">
+              <font color="white"><b>ALAT & BAHAN KONFIGURASI</b></font>
+            </a>
+          </td>
+          <td>
+            <a href="hasil.html">
+              <font color="white"><b>HASIL</b></font>
+            </a>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <script>
+      const wheel = document.getElementById("wheel");
+      const spinBtn = document.getElementById("spinBtn");
+      const result = document.getElementById("result");
+      const history = document.getElementById("history");
+
+      const segmentCount = 5;
+      const segmentAngle = 360 / segmentCount;
+
+      const steps = [
+        `1. Konfigurasi Identitas dan DNS Router
+
+Buka Winbox, login ke router.
+
+Masuk ke System > Identity, ubah hostname menjadi PROKEK-NO-NAMA.
+
+Masuk ke IP > DNS, isi DNS Server dengan alamat publik (misalnya Cloudflare/Google), lalu centang “Allow Remote Requests”.
+`,
+        `2. Pengaturan Interface Ether1 sebagai Koneksi Internet
+
+Masuk ke IP > Addresses, tambahkan:
+
+Interface: ether1
+
+Address: [IP Ether1]
+
+
+Masuk ke IP > Routes, tambahkan:
+
+Gateway: [IP Gateway].
+`,
+        `3. Konfigurasi Ether2 untuk Jaringan PC (Wired)
+
+Masuk ke IP > Addresses, tambahkan:
+
+Interface: ether2
+
+Address: [IP ether2]
+
+
+Masuk ke IP > DHCP Server, lakukan setup:
+
+DHCP pada ether2
+
+Range IP: [Rentang IP Ether2]
+
+Lease Time: 3,5 jam
+`,
+        `4. Konfigurasi Wireless Interface wlan1
+
+Masuk ke Wireless > Interfaces, klik wlan1:
+
+SSID: WIFI@NAMA
+
+Mode: AP Bridge
+
+
+Tambahkan IP:
+
+Interface: wlan1
+
+Address: [IP wlan1]
+
+
+DHCP Server:
+
+Range IP: [Rentang IP WLAN1]
+
+Lease Time: 8 jam
+`,
+        `5. Konfigurasi Firewall Filter Rules Dasar
+
+Masuk ke IP > Firewall > Filter Rules, lalu tambahkan sesuai soal:
+
+→ Blokir koneksi dari PC ke HP tanpa memberikan pesan
+Chain: forward, In. interface: [Ether2], Out interface: [WLAN1], Action: drop
+
+→ Semua HP hanya boleh mengakses situs mikrotik.co.id pada hari pelaksanaan ujian
+Chain: forward, Src. Address List: [List HP], Dst. Address List / Layer7: mikrotik.co.id, Advanced > Time: Pilih hari pelaksanaan ujian, Action: accept
+Tambahkan rule kedua:, Chain: forward, Src. Address List: [List HP], Action: drop
+
+→ Blokir akses ping dari Router ke HP tertentu dengan pesan pada hari Jumat, Sabtu, dan Rabu
+Chain: output, Dst. Address: [IP HP], Protocol: ICMP, Advanced > Time: Jumat, Sabtu, Rabu, Action: reject, Reject With: icmp-admin-prohibited
+
+→ Blokir akses web (HTTP dan HTTPS) dari PC tertentu pada pukul 04:00 s.d. 15:00
+Chain: forward, Src. Address: [IP PC], Protocol: 6 (TCP), Dst. Port: 80, 443,Advanced > Time: jam 04:00 - 15:00, Action: drop
+`,
+      ];
+
+      let currentRotation = 0;
+
+      function easeOutCubic(t) {
+        return 1 - Math.pow(1 - t, 3);
+      }
+
+      function animateSpin(targetAngle, duration = 4000) {
+        return new Promise((resolve) => {
+          const start = performance.now();
+          const initialRotation = currentRotation % 360;
+          const totalRotation = 360 * 5 + targetAngle - initialRotation;
+          function frame(now) {
+            let elapsed = now - start;
+            if (elapsed > duration) elapsed = duration;
+            const progress = easeOutCubic(elapsed / duration);
+            const rotation = initialRotation + totalRotation * progress;
+            wheel.style.transform = `rotate(${rotation}deg)`;
+            if (elapsed < duration) {
+              requestAnimationFrame(frame);
+            } else {
+              currentRotation = (initialRotation + totalRotation) % 360;
+              wheel.style.transform = `rotate(${currentRotation}deg)`;
+              resolve();
+            }
+          }
+          requestAnimationFrame(frame);
+        });
+      }
+
+      async function spinSequence() {
+        spinBtn.disabled = true;
+
+        result.textContent = "Free Spin 5x! Mulai putaran langkah...";
+        await new Promise((r) => setTimeout(r, 1500));
+
+        // Kosongkan riwayat setiap spin baru
+        history.textContent = "";
+
+        for (let i = 0; i < segmentCount; i++) {
+          const targetAngle = i * segmentAngle + segmentAngle / 2;
+          await animateSpin(targetAngle);
+          result.textContent = `Langkah ${i + 1}`;
+
+          // Tambahkan hasil detail ke riwayat
+          history.textContent += `Langkah ${i + 1}:\n${
+            steps[i]
+          }\n------------------------\n`;
+
+          await new Promise((r) => setTimeout(r, 1500));
+        }
+
+        result.textContent = "Selesai! Klik Spin untuk ulangi.";
+        spinBtn.disabled = false;
+      }
+
+      spinBtn.addEventListener("click", spinSequence);
+      feather.replace();
+    </script>
+  </body>
+</html>
